@@ -1,2 +1,7 @@
-# ual_ojs_stats
-statistical reports for ojs journals hosted by the University of Alberta Library
+# Overview
+
+The objective of this project is to periodically generate statistical reports of OJS journals hosted the University of Alberta Library.
+
+# List of Journals
+
+
