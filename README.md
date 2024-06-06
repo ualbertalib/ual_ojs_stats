@@ -64,3 +64,6 @@ The output is in json format. It can be in csv as well.
 ]
 
 ```
+# 7. Resources
+
+- [OJS API Document for Version 3.x.x](./files/ojs_api_3.0.0.json)
