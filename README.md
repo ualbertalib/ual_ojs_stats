@@ -8,6 +8,8 @@ the programming power offered by the Python program language.
 
 # List of Journals
 
+There are many journals hosted by the University of Alberta Library. They are
+compiled and presented below.
 
 | Journal Title | Abbreviated Journal Title |
 |:---|:---|
