@@ -1,4 +1,4 @@
-# Overview
+# 1. Overview
 
 The objective of this project is to periodically generate statistical reports of OJS journals hosted the University of Alberta Library.
 
@@ -6,7 +6,7 @@ To achieve the above goal, we leverage the Application Programming Interface (AP
 the programming power offered by the Python program language. 
 
 
-# List of Journals
+# 2. List of Journals
 
 There are many journals hosted by the University of Alberta Library. They are
 compiled and presented below.
@@ -15,7 +15,7 @@ compiled and presented below.
 |:---|:---|
 |Phenomenology and Practice| pandpr |
 
-# API Key for Each Journal
+# 3. API Key for Each Journal
 
 For each login account to each journal, one can generate an API key, which is needed to
 access securely the API endpoints. 
@@ -25,4 +25,5 @@ illustrate the basic step.
 
 ![API Key](images/api_key.png)
 
+# 4. 
 
