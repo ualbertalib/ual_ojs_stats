@@ -50,7 +50,12 @@ python3 stats.py journals.csv
 
 # 6. Output Format
 
-The output is in json format. It can be in csv as well. 
+The output is in json format. It can be in csv as well. The following is the results
+for three journals
+
+- ***pandpr***: Phenomenology and Practice
+- ***af***: Alternative Francophone
+- ***assert***: Annals of Social Studies Education Research for Teachers
 
 ```
 [
@@ -60,6 +65,20 @@ The output is in json format. It can be in csv as well.
         "published issues": 25,
         "abstract views": 2271,
         "galley views": 4660
+    },
+    {
+        "journal abbreviation": "af",
+        "published submissions": 221,
+        "published issues": 24,
+        "abstract views": 876,
+        "galley views": 1705
+    },
+    {
+        "journal abbreviation": "assert",
+        "published submissions": 55,
+        "published issues": 8,
+        "abstract views": 382,
+        "galley views": 798
     }
 ]
 
