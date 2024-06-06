@@ -25,5 +25,40 @@ illustrate the basic step.
 
 ![API Key](images/api_key.png)
 
-# 4. 
+# 4. Input Format
 
+The input is in csv format, for example, journals.csv:
+
+```
+jabbr,base_url,token
+pandpr,https://journals.library.ualberta.ca/,******************************************
+
+```
+
+- ***jabbr*** stands for the journal title abbreviation
+- ***base_url*** the base part of the host URL
+- ***token*** this is the api key that is used to access the API endpoints
+
+# 5. Execution of the Python Program
+
+```
+python3 stats.py journals.csv
+```
+
+- ***stats.py*** can be found [here](scripts/stats.py)
+- ***journals.csv*** can be found [here](files/journals.csv)
+
+# 6. Output Format
+
+```
+[
+    {
+        "journal abbreviation": "pandpr",
+        "published submissions": 214,
+        "published issues": 25,
+        "abstract views": 2271,
+        "galley views": 4660
+    }
+]
+
+```
