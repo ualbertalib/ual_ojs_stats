@@ -1,5 +1,6 @@
 from ojs import OJS
 import requests
+import json
 
 class Journal(OJS):
   def __init__(self,jabbr,base_url,token):
@@ -29,6 +30,7 @@ class Journal(OJS):
   def get_submissions(self,status=3):
        
       url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/submissions"
+
       resp = requests.get(
          url,
          params={'apiToken':self._token, 'status':status}
@@ -41,6 +43,7 @@ class Journal(OJS):
   def get_issues(self,is_published='true'):
        
       url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/issues"
+
       resp = requests.get(
          url,
          params={'apiToken':self._token, 'isPublished':f"'{is_published}'"}
@@ -49,6 +52,23 @@ class Journal(OJS):
       jsond=resp.json()
 
       return jsond
+
+  def get_publications(self, dateStart='2001-01-01'):
+
+      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications"
+
+      resp = requests.get(
+         url,
+         params={
+            'apiToken':self._token,
+            'dateStart':dateStart
+         }
+      )
+
+      jsond=resp.json()
+
+      return jsond
+
 
   def get_abviews(self, dateStart='2001-01-01'):
 
@@ -62,5 +82,22 @@ class Journal(OJS):
          }
       ) 
 
- 
-      return resp.json()
+      jsond=resp.json()
+
+      return jsond 
+
+  def get_galley_views(self, dateStart='2001-01-01'):
+
+      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications/galley"
+
+      resp = requests.get(
+         url,
+         params={
+            'apiToken':self._token,
+            'dateStart':dateStart
+         }
+      ) 
+
+      jsond=resp.json()
+
+      return jsond 
