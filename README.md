@@ -50,6 +50,8 @@ python3 stats.py journals.csv
 
 # 6. Output Format
 
+The output is in json format. It can be in csv as well. 
+
 ```
 [
     {
