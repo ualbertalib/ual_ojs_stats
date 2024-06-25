@@ -1,6 +1,7 @@
 from ojs import OJS
 import requests
 import json
+import datetime
 
 class Journal(OJS):
   def __init__(self,jabbr,base_url,token):
@@ -29,7 +30,8 @@ class Journal(OJS):
 
   def get_submissions(self,status=3):
        
-      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/submissions"
+      #url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/submissions"
+      url=f"{self._base_url}/api/v1/submissions"
 
       resp = requests.get(
          url,
@@ -42,7 +44,8 @@ class Journal(OJS):
 
   def get_issues(self,is_published='true'):
        
-      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/issues"
+      #url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/issues"
+      url=f"{self._base_url}/api/v1/issues"
 
       resp = requests.get(
          url,
@@ -53,15 +56,17 @@ class Journal(OJS):
 
       return jsond
 
-  def get_publications(self, dateStart='2001-01-01'):
+  def get_publications(self, dateStart='2001-01-01',dateEnd=datetime.date.today()):
 
-      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications"
+      #url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications"
+      url=f"{self._base_url}/api/v1/stats/publications"
 
       resp = requests.get(
          url,
          params={
             'apiToken':self._token,
-            'dateStart':dateStart
+            'dateStart':dateStart,
+            'dateEnd':dateEnd
          }
       )
 
@@ -70,15 +75,17 @@ class Journal(OJS):
       return jsond
 
 
-  def get_abviews(self, dateStart='2001-01-01'):
+  def get_abviews(self, dateStart='2001-01-01',dateEnd=datetime.date.today()):
 
-      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications/abstract"
+      #url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications/abstract"
+      url=f"{self._base_url}/api/v1/stats/publications/abstract"
 
       resp = requests.get(
          url,
          params={
             'apiToken':self._token,
-            'dateStart':dateStart
+            'dateStart':dateStart,
+            'dateEnd':dateEnd
          }
       ) 
 
@@ -86,15 +93,19 @@ class Journal(OJS):
 
       return jsond 
 
-  def get_galley_views(self, dateStart='2001-01-01'):
+#  def get_galley_views(self, dateStart='2001-01-01',dateEnd=datetime.date.today()):
+  def get_galley_views(self, dateStart='2001-01-01',timelineInterval='month'):
 
-      url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications/galley"
+      #url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/stats/publications/galley"
+      url=f"{self._base_url}/api/v1/stats/publications/galley"
 
       resp = requests.get(
          url,
          params={
             'apiToken':self._token,
+            'timelineInterval': timelineInterval,
             'dateStart':dateStart
+#            'dateEnd':dateEnd
          }
       ) 
 
