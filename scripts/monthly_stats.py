@@ -6,6 +6,7 @@ import pandas as pd
 from ojs import *
 from journal import *
 from chart import *
+from monthlyreport import *
 import datetime
 from openpyxl import Workbook
 from openpyxl import load_workbook
@@ -21,7 +22,6 @@ def get_previous_month():
 if __name__ == '__main__':
    
    fname=sys.argv[1]
-
    journals = pd.read_csv(fname) 
    previous_month=get_previous_month()
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
      token=journals["api_key"][ind]
      jnl=Journal(jabbr,base_url,token)
 
-     print(f"Processing: {jtitle},{jabbr},{base_url}")
+     print(f"{jtitle},{jabbr},{base_url},{token}")
 
      subs=jnl.get_submissions()
      issues=jnl.get_issues('true')
@@ -48,28 +48,21 @@ if __name__ == '__main__':
      stat={
         "journal_title":jtitle,
         "journal_abbreviation": jabbr,
-        "published_submissions": subs["itemsMax"] if "itemsMax" in subs else "0",
-        "published_issues": issues["itemsMax"] if "itemsMax" in issues else "0",
-        "abstract_views": abviews[0]["value"] if "error" not in abviews else "0",
-        "galley_views": galley[0]["value"] if "error" not in galley else "0"
+        "published_submissions": subs["itemsMax"],
+        "published_issues": issues["itemsMax"],
+        "abstract_views": abviews[0]["value"],
+        "galley_views": galley[0]["value"]
      }
      stats.append(stat)
-     print(f"Finished {jtitle}") 
 
    strs = json.dumps(stats, indent=4)
    print(strs)
 
-   chart1=Chart("../files/UAL_OJS_Report.xlsx","../reports/report.xlsx")
+   chart1=MonthlyReport("../files/UAL_OJS_Report.xlsx","../files/report.xlsx")
    chart1.update_worksheet(stats,"Journals",4,col_names)
    chart1.save_workbook() 
 
 
-   f_monthly_report=f"../reports/monthly_report_{str(previous_month[0]).replace('-','')}.xlsx"
-   chart2=Chart("../files/UAL_OJS_Monthly_Report_Template.xlsx",f_monthly_report)
+   chart2=MonthlyReport("../files/UAL_OJS_Monthly_Report_Template.xlsx",f"../files/monthly_report_{str(previous_month[0]).replace('-','')}.xlsx")
    chart2.update_monthly_views(stats,str(previous_month[0]),str(datetime.date.today().strftime("%Y-%m-%d")),col_names)
    chart2.save_workbook()
-
-   f_quarterly_report=f"../reports/quarterly_report_{str(previous_month[0]).replace('-','')}.xlsx"
-   chart3=Chart("../files/UAL_OJS_Quarterly_Report_Template.xlsx",f_quarterly_report)
-   chart3.update_quarterly_views(stats,str(previous_month[0]),str(datetime.date.today().strftime("%Y-%m-%d")),col_names)
-   chart3.save_workbook()

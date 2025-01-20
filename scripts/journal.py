@@ -104,7 +104,7 @@ class Journal(OJS):
          params={
             'apiToken':self._token,
             'timelineInterval': timelineInterval,
-            'dateStart':dateStart
+            'dateStart': dateStart
 #            'dateEnd':dateEnd
          }
       ) 
@@ -112,3 +112,76 @@ class Journal(OJS):
       jsond=resp.json()
 
       return jsond 
+
+   ### New additions ###
+
+  def get_current_issue(self):
+      url = f"{self._base_url}/api/v1/issues/current"
+      
+      resp = requests.get(
+         url,
+         params={
+	         'apiToken':self._token
+         }
+		)
+      
+      jsond=resp.json()
+      
+      return jsond
+  
+  
+  def get_issues_asof(self, dateEnd):
+     url = f"{self._base_url}/api/v1/issues"
+     
+     resp = requests.get(
+         url,
+         params={
+	         'apiToken': self._token,
+         }
+		)
+     
+     jsond=resp.json()
+   
+      # Find most recent issue, based on dateEnd
+     for item in jsond['items']:
+        issue_id = item['id']
+        if (item['datePublished'][:7] <= dateEnd): 
+           break
+        
+     #print(f"Issue ID: {issue_id}")
+
+
+     #issue_id = jsond['items'][0]['datePublished']
+
+     url2 = f"{self._base_url}/api/v1/issues/{issue_id}"
+     
+     resp = requests.get(
+         url2,
+         params={
+	         'apiToken': self._token,
+            'issueId': issue_id,
+         }
+		)
+     
+     jsond2 = resp.json()
+     
+     
+     return jsond2
+ 
+  def get_top_articles(self):
+     url = f"{self._base_url}/api/v1/stats/publications"
+      
+     resp = requests.get(
+         url,
+         params={
+      
+	         'apiToken': self._token,
+            'count': '10',
+            'dateStart': '2001-01-01', # For some reason necessary for the query to work - 01/01/01 is the earliest date the API supports
+            'orderDirection': 'DESC',
+         }
+		)
+     
+     jsond=resp.json()
+      
+     return jsond
