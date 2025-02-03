@@ -4,6 +4,7 @@ import datetime
 
 class nChart: 
 
+
   def __init__(self,chart_template_file,chart_file):
      self._chart_template_file=chart_template_file
      self._chart_file=chart_file
@@ -40,14 +41,18 @@ class nChart:
       cols[2].value = f"{article.abstract_views}"
       cols[3].value = f"{article.galley_views}"
 
-      '''
-      for j in range(0,len(cols)):
-         cols[j].value=article[col_names[j]]
-      '''
 
 
-  def update_latest():
-    pass
+  def update_latest(self, articles):
+    ws_stat=self.get_worksheet("Latest Issue")
+    row=2
+    for article in articles:
+      cols=[ws_stat[f"A{row}"],ws_stat[f"B{row}"],ws_stat[f"C{row}"],ws_stat[f"D{row}"],ws_stat[f"E{row}"]]
+      row=row+1
+      cols[0].value = f"{article.id}"
+      cols[1].value = f"{article.title}"
+      cols[2].value = f"{article.abstract_views}"
+      cols[3].value = f"{article.galley_views}"
 
 
 
