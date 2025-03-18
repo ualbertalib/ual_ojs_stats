@@ -1,5 +1,6 @@
 from openpyxl import Workbook
 from openpyxl import load_workbook
+from openpyxl.styles import numbers
 import datetime
 
 class nChart: 
@@ -34,12 +35,15 @@ class nChart:
     ws_stat=self.get_worksheet("Article Downloads (All Issues)")
     row=2
     for article in articles:
-      cols=[ws_stat[f"A{row}"],ws_stat[f"B{row}"],ws_stat[f"C{row}"],ws_stat[f"D{row}"],ws_stat[f"E{row}"]]
+      cells=[ws_stat[f"A{row}"],ws_stat[f"B{row}"],ws_stat[f"C{row}"],ws_stat[f"D{row}"],ws_stat[f"E{row}"]]
+      cells[0].number_format=numbers.BUILTIN_FORMATS[1]
+      cells[0].value = article.id
+      cells[1].value = f"{article.title}"
+      cells[2].number_format=numbers.BUILTIN_FORMATS[1]
+      cells[2].value = article.abstract_views
+      cells[3].number_format=numbers.BUILTIN_FORMATS[1]
+      cells[3].value = article.galley_views
       row=row+1
-      cols[0].value = f"{article.id}"
-      cols[1].value = f"{article.title}"
-      cols[2].value = f"{article.abstract_views}"
-      cols[3].value = f"{article.galley_views}"
 
 
 
@@ -47,12 +51,15 @@ class nChart:
     ws_stat=self.get_worksheet("Latest Issue")
     row=2
     for article in articles:
-      cols=[ws_stat[f"A{row}"],ws_stat[f"B{row}"],ws_stat[f"C{row}"],ws_stat[f"D{row}"],ws_stat[f"E{row}"]]
+      cells=[ws_stat[f"A{row}"],ws_stat[f"B{row}"],ws_stat[f"C{row}"],ws_stat[f"D{row}"],ws_stat[f"E{row}"]]
+      cells[0].number_format=numbers.BUILTIN_FORMATS[1]
+      cells[0].value = article.id
+      cells[1].value = f"{article.title}"
+      cells[2].number_format=numbers.BUILTIN_FORMATS[1]
+      cells[2].value = article.abstract_views
+      cells[3].number_format=numbers.BUILTIN_FORMATS[1]
+      cells[3].value = article.galley_views
       row=row+1
-      cols[0].value = f"{article.id}"
-      cols[1].value = f"{article.title}"
-      cols[2].value = f"{article.abstract_views}"
-      cols[3].value = f"{article.galley_views}"
 
 
 
