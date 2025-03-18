@@ -138,11 +138,11 @@ if __name__ == '__main__':
          top_10_articles.append(new_article)
       #top_10_articles.sort(key=lambda x: x.abstract_views, reverse=True)
 
-      chart1=nChart("../files/NEW_UAL_OJS_Report_Template.xlsx",f"../files/{dates[0]}_Report.xlsx")
+      chart1=nChart("../files/NEW_UAL_OJS_Report_Template_02.xlsx",f"../files/{dates[0]}_Report.xlsx")
       chart1.update_alltime(dates[0][0], dates[1][0], top_10_articles)
       chart1.save_workbook()
 
-      chart2=nChart("../files/NEW_UAL_OJS_Report_Template.xlsx",f"../files/{dates[0]}_Report.xlsx")
+      chart2=nChart("../files/NEW_UAL_OJS_Report_Template_02.xlsx",f"../files/{dates[0]}_Report.xlsx")
       chart2.update_latest(articles)
       chart2.save_workbook()
 
