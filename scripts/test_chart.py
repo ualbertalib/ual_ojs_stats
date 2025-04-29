@@ -18,7 +18,6 @@ class nChart:
   @workbook.setter
   def workbook(self,value):
     self._wb=value
-   
 
   def get_worksheet(self, name):
     return self._wb[name] 
@@ -27,6 +26,16 @@ class nChart:
     self._wb.save(self._chart_file)
 
   def update_alltime(self, start, end, articles):
+    '''
+    Populates the first chart template with statistics from the Journal's top 10 articles of all time. 
+    Also enters the start and end dates for the statistics period.
+    start: str
+      Start date.
+    end: str
+      End date.
+    articles: list[Articles]
+      List of top 10 articles, sorted in descending order.
+    '''
     ws_report=self.get_worksheet("Statistics Report")
 
     ws_report["I1"].value=str(start)

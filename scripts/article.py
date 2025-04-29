@@ -5,6 +5,28 @@ import json
 import datetime
 
 class Article(Journal):
+  '''
+   Article is a class that represents one article from an issue of an OJS journal.
+
+   Attributes
+   jabbr: str
+      Journal abbreviation. Inherited from Journal class.
+   base_url: str
+      Base URL of the OJS instance. Inherited from the OJS class via the Journal class.
+   token: str
+      API token corresponding to the journal. Ingherited from the Journal class.
+   id: int
+      The unique id assigned to a submission in OJS.
+   galley_views: int
+      The number of views of the article fulltext. -1 by default.
+   abstract_views: int
+      The number of views of the article abstract. -1 by default.
+   Title: str
+      The title of the article. Empty string by default.
+   Issue: str
+      The id of the article's issue. Empty string by default.
+
+  '''
   def __init__(self,jabbr,base_url,token,submission_id,galley_views=-1,abstract_views=-1,title="", issue=""):
      super().__init__(jabbr,base_url,token)
      self._id=submission_id
@@ -57,7 +79,16 @@ class Article(Journal):
      self._issue=value
 
   def get_submission_views(self, dateStart, dateEnd, submissionId):
-   
+      '''
+      Gets the views of an Article from a given time period.
+      dateStart: str
+         Start date.
+      dateEnd: str
+         End date.
+      submissionId: str
+         ID of the article (assigned in OJS).
+      '''
+
       url=f"{self._base_url}/api/v1/stats/publications/{submissionId}"
    
       resp = requests.get(
@@ -72,23 +103,6 @@ class Article(Journal):
       jsond=resp.json()
       
       return jsond
-  
-  def get_submission(self, submissionId):
-     url=f"{self._base_url}/api/v1/stats/submissions/{submissionId}/publications"
-
-     resp = requests.get(
-         url,
-         params={
-				'apiToken':self._token,
-            'submissionId':f"{str(submissionId)}",
-			}
-		)
-     
-     #print(f"{resp}")
-       
-     jsond=resp.json()
-     
-     return jsond
 
      
 
