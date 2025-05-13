@@ -56,5 +56,5 @@ class Chart:
       for j in range(0,len(cols)):
          cols[j].value=stat[col_names[j]]
 
-
+   
 
