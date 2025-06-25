@@ -6,15 +6,18 @@ import datetime
 
 class Article(Journal):
   '''
-   Article is a class that represents one article from an issue of an OJS journal.
+   Article is a class that represents one article from an issue of
+   an OJS journal.
 
    Attributes
    jabbr: str
       Journal abbreviation. Inherited from Journal class.
    base_url: str
-      Base URL of the OJS instance. Inherited from the OJS class via the Journal class.
+      Base URL of the OJS instance. Inherited from the OJS class via 
+      the Journal class.
    token: str
-      API token corresponding to the journal. Ingherited from the Journal class.
+      API token corresponding to the journal. Ingherited from 
+      the Journal class.
    id: int
       The unique id assigned to a submission in OJS.
    galley_views: int
@@ -27,7 +30,7 @@ class Article(Journal):
       The id of the article's issue. Empty string by default.
 
   '''
-  def __init__(self,jabbr,base_url,token,submission_id,galley_views=-1,abstract_views=-1,title="", issue=""):
+  def __init__(self,jabbr,base_url,token,submission_id,galley_views=0,abstract_views=0,title="", issue=""):
      super().__init__(jabbr,base_url,token)
      self._id=submission_id
      self._galley_views=galley_views
@@ -96,15 +99,10 @@ class Article(Journal):
          params={
 				'apiToken':self._token,
 				'dateStart':dateStart,
-				'dateEnd':dateEnd,
+				'dateEnd':dateEnd
 			}
 		)
       
       jsond=resp.json()
       
       return jsond
-
-     
-
-
-
