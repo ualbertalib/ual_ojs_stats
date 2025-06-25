@@ -6,77 +6,146 @@ import pandas as pd
 from ojs import *
 from journal import *
 from chart import *
-from quarterlyreport import *
+from quarterlyreportchart import *
 import datetime
 from openpyxl import Workbook
 from openpyxl import load_workbook
-
-def get_previous_quarter():
-   today = datetime.date.today()
-   first = today.replace(day=1)
-   month_three = first - datetime.timedelta(days=1)
-   month_lookup_three = month_three.strftime("%Y-%m")
-   
-   first = month_three.replace(day=1)
-   month_two = first - datetime.timedelta(days=1)
-   month_lookup_two = month_two.strftime("%Y-%m")
-   
-   first = month_two.replace(day=1)
-   month_one = first - datetime.timedelta(days=1)
-   month_lookup_one = month_one.strftime("%Y-%m")
-   months = [[month_lookup_one, month_one], [month_lookup_two, month_two], [month_lookup_three, month_three]]
-
-   return months
-
+import pprint as pp
+from article import *
 
 if __name__ == '__main__':
    
+   # file containing a list of journals
    fname=sys.argv[1]
-   journals = pd.read_csv(fname) 
-   months = get_previous_quarter()
 
+   # the first date of a quarter
+   start_date=sys.argv[2]
+
+   # the last date of a quarter
+   end_date=sys.argv[3]
+
+   # iStart: for a given list of journals, starting
+   # from the iStart journal, skipping the one ahead
+   # of iStart 
+   iStart=0
+   if len(sys.argv) == 5:
+     iStart=int(sys.argv[4])
+
+   #iEnd: by default iEnd=10000, kind of like infinity
+   iEnd=10000
+   if len(sys.argv) == 6:
+    iEnd=int(sys.argv[5])
+
+   journals = pd.read_csv(fname) 
+   
    stats=[]
    col_names=["journal_title","published_submissions","published_issues","abstract_views","galley_views"]
    for ind in journals.index:
+      if ind < iStart or ind > iEnd:
+        continue
+      articles=[]
       jtitle=journals["journal_title"][ind]
       jabbr=journals["journal_abbr"][ind]
       base_url=journals["base_url"][ind]
       token=journals["api_key"][ind]
       jnl=Journal(jabbr,base_url,token)
-    
-      print(f"{jtitle},{jabbr},{base_url},{token}")
-         
-      for month in months:
 
-         subs=jnl.get_submissions()
-         issues=jnl.get_issues('true')
-         abviews=jnl.get_abviews(dateStart=f"{month[0]}-01",dateEnd=f"{month[1]}")
-         galley=jnl.get_galley_views(dateStart=f"{month[0]}-01")
-         #galley=jnl.get_galley_views(dateStart="2024-03-01",timelineInterval='month')
-         pubs=jnl.get_publications()
-   
-         stat=dict()
-   
-         stat={
-            "journal_title":jtitle,
-            "journal_abbreviation": jabbr,
-            "published_submissions": subs["itemsMax"],
-            "published_issues": issues["itemsMax"],
-            "abstract_views": abviews[0]["value"],
-            "galley_views": galley[0]["value"]
-         }
-         stats.append(stat)
-         #end loop
-   strs = json.dumps(stats, indent=4)
-   print(strs)
+      print(f"journal: {jtitle},{jabbr},{base_url}")
 
-   chart1=QuarterlyReport("../files/UAL_OJS_Report.xlsx","../files/report.xlsx")
-   chart1.update_worksheet(stats,"Journals",4,col_names)
-   chart1.save_workbook() 
+      # get the most recent issue as constrained by 
+      # the end_date.   
+      current=jnl.get_issues_asof(end_date)
+      print(f"current = {current}")
+      if current is None:
+         continue
+      for article in current["articles"]:
+         for publication in article["publications"]:
+            id = publication["submissionId"]
+            current_article = Article(jnl.jabbr,jnl.base_url,jnl.token,id)
+             
+            views = current_article.get_submission_views(
+                    dateStart=f"{start_date}",
+                    dateEnd=f"{end_date}",
+                    submissionId=f"{id}")
+
+            if "galleyViews" not in views:
+                current_article.galley_views=0
+            else:
+                current_article.galley_views = views["galleyViews"]
+            if "abstractViews" not in views:
+               current_article.abstract_views = 0
+            else:
+               current_article.abstract_views = views["abstractViews"]
+
+            if "publication" in views:
+                current_article.title = views["publication"]["fullTitle"]["en_US"]
+            else:
+                current_article.title="Not Found"
+
+            articles.append(current_article)
+
+      articles.sort(key=lambda x: x.abstract_views, reverse=True)
 
 
-   chart2=QuarterlyReport("../files/UAL_OJS_Quarterly_Report_Template.xlsx",f"../files/quarterly_report.xlsx")
-   chart2.update_monthly_views(stats,str(months[0][0]),str(datetime.date.today().strftime("%Y-%m-%d")),col_names)
-   chart2.update_monthly_views(stats,str(months[1][0]),str(datetime.date.today().strftime("%Y-%m-%d")),col_names)
-   chart2.update_monthly_views(stats,str(months[2][0]),str(datetime.date.today().strftime("%Y-%m-%d")),col_names)
-   chart2.save_workbook()
+      for article in articles:
+         print(f"Latest={article}")
+
+      print("\nTop 10 articles:")
+      #top_10 = jnl.get_top_articles(start_date=start_date,end_date=end_date)
+      all_articles = jnl.get_all_articles(start_date=start_date,end_date=end_date)
+
+      sorted_all_articles = []
+      if all_articles is not None:
+          for item in all_articles["items"]:
+                print(f"item = {item}")
+                if item["publication"]["fullTitle"]["en_US"] == "":
+                   title=item["publication"]["fullTitle"]["fr_CA"]
+                else:
+                   title=item["publication"]["fullTitle"]["en_US"]
+
+                new_article = Article(jnl.jabbr, jnl.base_url, jnl.token, 
+                               item["publication"]["id"],
+                               item["galleyViews"], item["abstractViews"],
+                               title)
+
+                sorted_all_articles.append(new_article)
+
+
+          sorted_all_articles.sort(key=lambda x: x.galley_views, reverse=True)
+  
+      top_10_articles=sorted_all_articles[:10]
+      
+      for article in top_10_articles:
+         print(f"top10 ={article}")
+
+      quarter_name=start_date.replace("-","")[0:6]
+      create_date=datetime.date.today().strftime("%B %d, %Y")
+      date_range=f"{start_date} : {end_date}"
+      coverage_date=date_range
+      chart1=QuarterlyReportChart("../files/UAL_OJS_Quarterly_Report_Template.xlsx",
+                                 f"../reports/quarterly_report_{quarter_name}_{jabbr}.xlsx")
+#   print(create_date)
+      chart1.reset_charts()
+      chart1.update_report(start_date,create_date,date_range,jtitle)
+      chart1.update_latest(articles)
+      chart1.update_alltime(start_date, end_date, top_10_articles)
+      nrows=len(top_10_articles)+10
+      height=chart1.get_row_height()*nrows
+      chart1.add_top_articles_chart(
+                                     x_title="Articles",
+                                     y_title="Number of Views",
+                                     minrow=1,
+                                     maxrow=len(top_10_articles)+1,
+                                     loc="B10",chart_height=height
+                                   )
+
+      nrows=len(top_10_articles)+20
+      height=(len(articles)+10)*chart1.get_row_height()
+      chart1.add_latest_issue_chart(
+                                     x_title="Articles",
+                                     y_title="Number of Views",
+                                     minrow=1,
+                                     maxrow=len(articles)+1,
+                                     loc=f"B{nrows}",chart_height=height
+                                   )
+      chart1.save_workbook()
