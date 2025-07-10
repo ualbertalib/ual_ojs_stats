@@ -9,28 +9,29 @@ class Article(Journal):
    Article is a class that represents one article from an issue of
    an OJS journal.
 
-   Attributes
-   jabbr: str
-      Journal abbreviation. Inherited from Journal class.
-   base_url: str
-      Base URL of the OJS instance. Inherited from the OJS class via 
-      the Journal class.
-   token: str
-      API token corresponding to the journal. Ingherited from 
-      the Journal class.
-   id: int
-      The unique id assigned to a submission in OJS.
-   galley_views: int
-      The number of views of the article fulltext. -1 by default.
-   abstract_views: int
-      The number of views of the article abstract. -1 by default.
-   Title: str
-      The title of the article. Empty string by default.
-   Issue: str
-      The id of the article's issue. Empty string by default.
-
+   Attributes:
+     jabbr: str
+        Journal abbreviation. Inherited from Journal class.
+     base_url: str
+        Base URL of the OJS instance. Inherited from the OJS class via 
+        the Journal class.
+     token: str
+        API token corresponding to the journal. Ingherited from 
+        the Journal class.
+     id: int
+        The unique id assigned to a submission in OJS.
+     galley_views: int
+        The number of views of the article fulltext. -1 by default.
+     abstract_views: int
+        The number of views of the article abstract. -1 by default.
+     Title: str
+        The title of the article. Empty string by default.
+     Issue: str
+        The id of the article's issue. Empty string by default.
   '''
-  def __init__(self,jabbr,base_url,token,submission_id,galley_views=0,abstract_views=0,title="", issue=""):
+  def __init__(self,jabbr,base_url,
+               token,submission_id,galley_views=0,
+               abstract_views=0,title="", issue=""):
      super().__init__(jabbr,base_url,token)
      self._id=submission_id
      self._galley_views=galley_views
@@ -80,6 +81,18 @@ class Article(Journal):
   @issue.setter
   def issue(self, value):
      self._issue=value
+
+  def __eq__(self, other):
+     if not isinstance(other, Article):
+        return NotImplemented
+     return self._id == other.id and self._title == other.title
+
+  def __hash__(self):
+     return hash(self._id,self._title)
+
+
+  def has_no_views(self):
+     return self._abstract_views == 0 and self._galley_views == 0    
 
   def get_submission_views(self, dateStart, dateEnd, submissionId):
       '''
