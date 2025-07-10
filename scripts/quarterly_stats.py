@@ -13,6 +13,21 @@ from openpyxl import load_workbook
 import pprint as pp
 from article import *
 
+def get_item_title(item):
+    if item["publication"]["fullTitle"]["en_US"].strip() != "":
+        title=item["publication"]["fullTitle"]["en_US"]
+    elif item["publication"]["fullTitle"]["fr_CA"].strip() != "":
+        title=item["publication"]["fullTitle"]["fr_CA"]
+    elif item["publication"]["fullTitle"]["it_IT"].strip() != "":
+         title=item["publication"]["fullTitle"]["it_IT"]
+    elif item["publication"]["fullTitle"]["de_DE"].strip() != "":
+         title=item["publication"]["fullTitle"]["de_DE"]
+    else:
+         title=""
+
+    return title
+
+
 if __name__ == '__main__':
    
    # file containing a list of journals
@@ -54,8 +69,11 @@ if __name__ == '__main__':
 
       # get the most recent issue as constrained by 
       # the end_date.   
-      current=jnl.get_issues_asof(end_date)
-      print(f"current = {current}")
+      #current=jnl.get_issues_asof(end_date)
+      current=jnl.get_issues_asof(start_date)
+      #print(f"current = {current}")
+      pp.pprint(current) 
+
       if current is None:
          continue
       for article in current["articles"]:
@@ -76,13 +94,15 @@ if __name__ == '__main__':
                current_article.abstract_views = 0
             else:
                current_article.abstract_views = views["abstractViews"]
-
             if "publication" in views:
-                current_article.title = views["publication"]["fullTitle"]["en_US"]
+                #current_article.title = views["publication"]["fullTitle"]["en_US"]
+                current_article.title = get_item_title(views)
             else:
                 current_article.title="Not Found"
-
-            articles.append(current_article)
+ 
+            if current_article not in articles:
+                 if not current_article.has_no_views():
+                    articles.append(current_article)
 
       articles.sort(key=lambda x: x.abstract_views, reverse=True)
 
@@ -97,12 +117,7 @@ if __name__ == '__main__':
       sorted_all_articles = []
       if all_articles is not None:
           for item in all_articles["items"]:
-                print(f"item = {item}")
-                if item["publication"]["fullTitle"]["en_US"] == "":
-                   title=item["publication"]["fullTitle"]["fr_CA"]
-                else:
-                   title=item["publication"]["fullTitle"]["en_US"]
-
+                title=get_item_title(item)
                 new_article = Article(jnl.jabbr, jnl.base_url, jnl.token, 
                                item["publication"]["id"],
                                item["galleyViews"], item["abstractViews"],
@@ -122,7 +137,8 @@ if __name__ == '__main__':
       create_date=datetime.date.today().strftime("%B %d, %Y")
       date_range=f"{start_date} : {end_date}"
       coverage_date=date_range
-      chart1=QuarterlyReportChart("../files/UAL_OJS_Quarterly_Report_Template.xlsx",
+      #chart1=QuarterlyReportChart("../files/UAL_OJS_Quarterly_Report_Template.xlsx",
+      chart1=QuarterlyReportChart("../files/Updated_UAL_OJS_Quarterly_Stats_Template.xlsx",
                                  f"../reports/quarterly_report_{quarter_name}_{jabbr}.xlsx")
 #   print(create_date)
       chart1.reset_charts()
