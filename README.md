@@ -6,83 +6,51 @@ To achieve the above goal, we leverage the Application Programming Interface (AP
 the programming power offered by the Python program language. 
 
 
-# 2. List of Journals
+# 2. Requirements
 
-There are many journals hosted by the University of Alberta Library. They are
-compiled and presented below.
+The program is written in **Python** and requires the **Requests**, **Pandas**, and **OpenPyxl** libraries.
 
-| Journal Title | Abbreviated Journal Title |
-|:---|:---|
-|Phenomenology and Practice| pandpr |
+Currently, we recommend running the program in MacOS or Linux.
 
-# 3. API Key for Each Journal
+You will also need a .csv file that lists your journals, following this format:
 
-For each login account to each journal, one can generate an API key, which is needed to
-access securely the API endpoints. 
+| journal_title | journal_abbr | base_url | api_key |
+|:---|:---|:---|:---|:---|
+|Phenomenology and Practice | pandpr | https://journals.library.ualberta.ca/pandpr/index.php/pandpr | eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.IjUyYjRjMGNlYTIzNWRiZmU5Zjg5NmM0MzM3YzM1NmUzZDg4Y2I2ZjMi.lRo3cES3LKF5SE_ZTHZe90KTfsNtMGhipIzXCrMOZes |
 
-To generate the API key, we use the journal "Phenomenology and Practice" as an example, and
-illustrate the basic step.
+***journal_title:*** Title of the journal.
+***journal_abbr:*** Abbreviated title.
+***base_url:*** URL of the journal's homepage.
+***api_key (token):*** API key corresponding to the journal. This is configured in OJS as shown:
 
 ![API Key](images/api_key.png)
 
-# 4. Input Format
 
-The input is in csv format, for example, journals.csv:
+# 3. Program Execution
 
-```
-jabbr,base_url,token
-pandpr,https://journals.library.ualberta.ca/,******************************************
+The command pattern is:
 
 ```
-
-- ***jabbr*** stands for the journal title abbreviation
-- ***base_url*** the base part of the host URL
-- ***token*** this is the api key that is used to access the API endpoints
-
-# 5. Execution of the Python Program
-
-```
-python3 stats.py journals.csv
+python3 quarterly_stats.py [csv_file] [start_date] [end_date] [start_index] [end_index]
 ```
 
-- ***stats.py*** can be found [here](scripts/stats.py)
-- ***journals.csv*** can be found [here](files/journals.csv)
+***csv_file:*** The name/path of your csv list of journals.
+***start_date*** and ***end_date***: The reporting period. Dates are in YYYY-MM-DD format.
+***start_index*** and ***end_index***: Optional. Used to slice a section of the journal list, if you do not want to report on all journals in the list.
 
-# 6. Output Format
-
-The output is in json format. It can be in csv as well. The following is the results
-for three journals
-
-- ***pandpr***: Phenomenology and Practice
-- ***af***: Alternative Francophone
-- ***assert***: Annals of Social Studies Education Research for Teachers
+For example:
 
 ```
-[
-    {
-        "journal abbreviation": "pandpr",
-        "published submissions": 214,
-        "published issues": 25,
-        "abstract views": 2271,
-        "galley views": 4660
-    },
-    {
-        "journal abbreviation": "af",
-        "published submissions": 221,
-        "published issues": 24,
-        "abstract views": 876,
-        "galley views": 1705
-    },
-    {
-        "journal abbreviation": "assert",
-        "published submissions": 55,
-        "published issues": 8,
-        "abstract views": 382,
-        "galley views": 798
-    }
-]
+python3 quarterly_stats.py my_journals.csv 2025-01-01 2025-03-31 0 10
+```
+
+will produce reports for the first 10 journals in my_journals.csv.
+
+# 4. Output
+
+The program will produce an Excel spreadsheet report for each journal that is reported on. The naming convention is [journal_abbr]_[start_date]_quarterly_report.xlsx. They will appear in the reports folder.
 
 ```
-# 7. Resources
+# 5. Resources
 
 - [OJS API Document for Version 3.x.x](./files/ojs_api_3.0.0.json)
