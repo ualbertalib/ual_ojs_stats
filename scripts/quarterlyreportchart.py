@@ -5,6 +5,7 @@ from openpyxl.chart import Series, Reference, BarChart
 from openpyxl.chart.label import DataLabelList
 from openpyxl.chart.layout import Layout,ManualLayout
 from openpyxl.styles import numbers
+from openpyxl.styles import Alignment
 import datetime
 from chart import Chart
 from openpyxl.drawing.fill import PatternFillProperties, ColorChoice
@@ -16,10 +17,11 @@ class QuarterlyReportChart(Chart):
 
     def update_report(self, coverage_date, create_date, date_range, title): 
         ws_report=self.get_worksheet("Statistics Report")
-        ws_report["I1"]=f"{coverage_date}"
+        ws_report["G1"]=f"{date_range[:10]} to {date_range[13:]}"
         ws_report["E2"]=f"{title}"
-        ws_report["C4"]=f"{create_date}"
-        ws_report["D6"]=f"Total Journal Home Page Views between {date_range}"
+        ws_report["E2"].alignment = Alignment(horizontal='center', vertical='center', wrapText=True)
+        ws_report["E4"]=f"{create_date}"
+        # ws_report["D6"]=f"Total Journal Home Page Views between {date_range}"
 
     
     def reset_charts(self):
@@ -99,7 +101,7 @@ class QuarterlyReportChart(Chart):
             row=row+1
 
 
-    def add_latest_issue_chart(self,x_title="",y_title="",min_data_col=3,
+    def add_latest_issue_chart(self,issue_name="",x_title="",y_title="",min_data_col=3,
                             max_data_col=4,minrow=2,maxrow=10,loc="A10",chart_height=15):
 
        chart1 = BarChart()
@@ -109,7 +111,7 @@ class QuarterlyReportChart(Chart):
        chart1.height = chart_height
        chart1.x_axis.title = x_title
        chart1.y_axis.title = y_title
-       chart1.title="Latest Issue"
+       chart1.title=f"Latest Issue\n{issue_name}"
        chart1.width=30
        chart1.gapWidth=30
        chart1.overlap= -20

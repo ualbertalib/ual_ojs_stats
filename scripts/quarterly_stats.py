@@ -71,8 +71,8 @@ if __name__ == '__main__':
       # the end_date.   
       #current=jnl.get_issues_asof(end_date)
       current=jnl.get_issues_asof(start_date)
-      #print(f"current = {current}")
       pp.pprint(current) 
+
 
       if current is None:
          continue
@@ -137,27 +137,27 @@ if __name__ == '__main__':
       create_date=datetime.date.today().strftime("%B %d, %Y")
       date_range=f"{start_date} : {end_date}"
       coverage_date=date_range
-      #chart1=QuarterlyReportChart("../files/UAL_OJS_Quarterly_Report_Template.xlsx",
       chart1=QuarterlyReportChart("../files/Updated_UAL_OJS_Quarterly_Stats_Template.xlsx",
-                                 f"../reports/quarterly_report_{quarter_name}_{jabbr}.xlsx")
+                                 f"../reports/{jabbr}_{quarter_name}_quarterly_report.xlsx")
 #   print(create_date)
       chart1.reset_charts()
       chart1.update_report(start_date,create_date,date_range,jtitle)
       chart1.update_latest(articles)
       chart1.update_alltime(start_date, end_date, top_10_articles)
       nrows=len(top_10_articles)+10
-      height=chart1.get_row_height()*nrows
+      height=chart1.get_row_height()*nrows*2
       chart1.add_top_articles_chart(
                                      x_title="Articles",
                                      y_title="Number of Views",
                                      minrow=1,
                                      maxrow=len(top_10_articles)+1,
-                                     loc="B10",chart_height=height
+                                     loc="B6",chart_height=height
                                    )
 
-      nrows=len(top_10_articles)+20
-      height=(len(articles)+10)*chart1.get_row_height()
+      nrows=len(top_10_articles)+30
+      height=(len(articles)+10)*chart1.get_row_height()*2
       chart1.add_latest_issue_chart(
+                                     issue_name=f"{current['identification']}",
                                      x_title="Articles",
                                      y_title="Number of Views",
                                      minrow=1,
