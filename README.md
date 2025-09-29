@@ -60,16 +60,16 @@ The program will produce an Excel spreadsheet report for each journal that is re
 
 
 # 5. Notes and Troubleshooting
-*OJS Version*
+**OJS Version**<br>
 The program was written and tested using OJS 3.3. Testing and possible adaptation to OJS 3.5 is forthcoming (late 2025/early 2026).
 
-*Journals in Languages Other Than English*
+**Journals in Languages Other Than English**<br>
 Currently, the program supports English, Canadian French, Italian, and German. To add another language to your local repository, follow the convention in the get_item_title function in quarterly_stats.py.
 
-*Report Appearance*
+**Report Appearance**<br>
 Report appearance is affected by both the report template and the code. Colour, header formatting, and images (e.g. logos) can be added by altering the template. Chart appearance is primarily determined by the program.
 
-*Large Journals*
+**Large Journals**<br>
 You may encounter timeout errors with particularly large journals. If this occurs, try increasing your server timeout limit. (Ours is 180 seconds.)
 
 # 6. Resources
