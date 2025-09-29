@@ -18,13 +18,10 @@ You will also need a .csv file that lists your journals, following this format:
 |:---|:---|:---|:---|
 |Phenomenology and Practice | pandpr | https://journals.library.ualberta.ca/pandpr/index.php/pandpr | eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.IjUyYjRjMGNlYTIzNWRiZmU5Zjg5NmM0MzM3YzM1NmUzZDg4Y2I2ZjMi.lRo3cES3LKF5SE_ZTHZe90KTfsNtMGhipIzXCrMOZes |
 
-***journal_title:*** Title of the journal.
-
-***journal_abbr:*** Abbreviated title.
-
-***base_url:*** URL of the journal's homepage.
-
-***api_key (token):*** API key corresponding to the journal. This is configured in OJS as shown:
+***journal_title:*** Title of the journal.  
+***journal_abbr:*** Abbreviated title.  
+***base_url:*** URL of the journal's homepage.  
+***api_key (token):*** API key corresponding to the journal. This is configured in OJS as shown:  
 
 ![API Key](images/api_key.png)
 
