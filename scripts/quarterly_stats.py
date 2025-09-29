@@ -138,7 +138,7 @@ if __name__ == '__main__':
       date_range=f"{start_date} : {end_date}"
       coverage_date=date_range
       chart1=QuarterlyReportChart("../files/Updated_UAL_OJS_Quarterly_Stats_Template.xlsx",
-                                 f"../reports/{jabbr}_{quarter_name}_quarterly_report.xlsx")
+                                 f"../reports/{jabbr}_{quarter_name}_report.xlsx")
 #   print(create_date)
       chart1.reset_charts()
       chart1.update_report(start_date,create_date,date_range,jtitle)
