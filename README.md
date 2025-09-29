@@ -40,9 +40,9 @@ python3 quarterly_stats.py [csv_file] [start_date] [end_date] [start_index] [end
 
 <br>
 
-***csv_file:*** The name/path of your csv list of journals.
-***start_date*** and ***end_date***: The reporting period. Dates are in YYYY-MM-DD format.
-***start_index*** and ***end_index***: Optional. Used to slice a section of the journal list,if you do not want to report on all journals in the list.
+***csv_file:*** The name/path of your csv list of journals.  
+***start_date*** and ***end_date***: The reporting period. Dates are in YYYY-MM-DD format.  
+***start_index*** and ***end_index***: Optional. Used to slice a section of the journal list, if you do not want reports for all journals in the list.
 
 <br>
 
@@ -56,7 +56,7 @@ will produce reports for the first 10 journals in my_journals.csv.
 
 # 4. Output
 
-The program will produce an Excel spreadsheet report for each journal that is reported on, in the Reports folder. The naming convention is [journal_abbr]_[start_date]_quarterly_report.xlsx.
+The program will produce an Excel spreadsheet report for each journal that is reported on, located in the Reports folder. The naming convention for the reports is [journal_abbr]_[start_date]_report.xlsx.
 
 
 # 5. Resources
