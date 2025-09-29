@@ -61,7 +61,7 @@ The program will produce an Excel spreadsheet report for each journal that is re
 
 # 5. Notes and Troubleshooting
 **OJS Version**<br>
-The program was written and tested using OJS 3.3. Testing and possible adaptation to OJS 3.5 is forthcoming (late 2025/early 2026).
+The program was written and tested using OJS 3.3. OJS 3.5 testing is forthcoming (late 2025/early 2026).
 
 **Journals in Languages Other Than English**<br>
 Currently, the program supports English, Canadian French, Italian, and German. To add another language to your local repository, follow the convention in the get_item_title function in quarterly_stats.py.
