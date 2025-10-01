@@ -59,6 +59,7 @@ will produce reports for the first 10 journals in my_journals.csv.
 
 The program will produce an Excel spreadsheet report for each journal that is reported on, located in the Reports folder. The naming convention for the reports is [journal_abbr]_[start_date]_report.xlsx.
 
+An example can be found in the reports folder.
 
 # 5. Notes and Troubleshooting
 **OJS Version**<br>
