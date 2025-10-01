@@ -29,6 +29,7 @@ You will also need a .csv file that lists your journals, following this format:
 
 ![API Key](images/api_key.png)
 
+journals.csv, found in the files folder, can be used as a template for your journal list.
 
 # 3. Program Execution
 
