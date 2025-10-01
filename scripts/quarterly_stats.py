@@ -5,7 +5,6 @@ import json
 import pandas as pd
 from ojs import *
 from journal import *
-from chart import *
 from quarterlyreportchart import *
 import datetime
 from openpyxl import Workbook
