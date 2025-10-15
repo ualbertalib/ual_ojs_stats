@@ -132,7 +132,7 @@ class QuarterlyReportChart(Chart):
        chart1.legend.position = 't' #right
        ws=self.get_worksheet("Statistics Report")
 
-       colors = ["FFA500", "3CB371"]  # Hex codes for green and yellow
+       colors = ["38761d", "f1c232"]  # Hex codes for green and yellow
 
        for i, series in enumerate(chart1.series):
           series.graphicalProperties.solidFill = colors[i]
@@ -170,7 +170,7 @@ class QuarterlyReportChart(Chart):
        ws=self.get_worksheet("Statistics Report")
 
        # Set series colors (Green and Yellow)
-       colors = ["FFA500", "3CB371"]  # Hex codes for green and yellow
+       colors = ["38761d", "f1c232"]  # Hex codes for green and yellow
        for i, series in enumerate(chart1.series):
           series.graphicalProperties.solidFill = colors[i]
 
