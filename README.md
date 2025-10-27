@@ -1,9 +1,8 @@
 # 1. Overview
 
-The objective of this project is to periodically generate statistical reports of OJS journals hosted the University of Alberta Library.
+The objective of this project is to periodically generate statistical reports for OJS journals hosted by the University of Alberta Library.
 
-To achieve the above goal, we leverage the Application Programming Interface (API) offered by OJS and take advantage of
-the programming power offered by the Python program language. 
+We will accomplish this by leveraging the OJS Application Programming Interface (API) and utilizing the Python programming language.
 
 
 # 2. Requirements
