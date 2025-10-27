@@ -26,16 +26,17 @@ You will also need a .csv file that lists your journals, following this format:
 
 <br>
 
-An example of the input file is presented below:
-
-```
-journal_title,journal_abbr,base_url,api_key
-Phenomenology and Practice,pandpr,https://journals.library.ualberta.ca/pandpr/index.php/pandpr, API_KEY_NEEDS_TO_BE_PLACED_HERE
-```
 
 ![API Key](images/api_key.png)
 
-journals.csv, found in the files folder, can be used as a template for your journal list.
+journals.csv, found in the files folder, can be used as a template for your journal list. 
+
+
+```
+journal_title,journal_abbr,base_url,api_key
+Phenomenology and Practice,pandpr,https://journals.library.ualberta.ca/pandpr/index.php/pandpr, API_KEY_IS_HERE
+
+```
 
 # 3. Program Execution
 
