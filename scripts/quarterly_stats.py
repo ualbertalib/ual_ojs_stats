@@ -12,23 +12,19 @@ from openpyxl import Workbook
 from openpyxl import load_workbook
 import pprint as pp
 from article import *
-
-def get_item_title(item):
-    if item["publication"]["fullTitle"]["en_US"].strip() != "":
-        title=item["publication"]["fullTitle"]["en_US"]
-    elif item["publication"]["fullTitle"]["fr_CA"].strip() != "":
-        title=item["publication"]["fullTitle"]["fr_CA"]
-    elif item["publication"]["fullTitle"]["it_IT"].strip() != "":
-         title=item["publication"]["fullTitle"]["it_IT"]
-    elif item["publication"]["fullTitle"]["de_DE"].strip() != "":
-         title=item["publication"]["fullTitle"]["de_DE"]
-    else:
-         title=""
-
-    return title
-
+import logging
+from util import *
 
 if __name__ == '__main__':
+
+   # configure logging format
+   logging.basicConfig(
+        level=logging.INFO,
+        format='%(levelname)s: %(message)s'
+   )
+
+   # validate arguments before using these
+   validate_args(sys.argv)
    
    # file containing a list of journals
    fname=sys.argv[1]
@@ -65,17 +61,17 @@ if __name__ == '__main__':
       token=journals["api_key"][ind]
       jnl=Journal(jabbr,base_url,token)
 
-      print(f"journal: {jtitle},{jabbr},{base_url}")
+      logging.info(f"journal: {jtitle},{jabbr},{base_url}")
 
       # get the most recent issue as constrained by 
-      # the end_date.   
-      #current=jnl.get_issues_asof(end_date)
+      # the end_date. this issue has one to many articles   
       current=jnl.get_issues_asof(start_date)
-      pp.pprint(current) 
+      #logging.info(current) 
 
 
       if current is None:
          continue
+
       for article in current["articles"]:
          for publication in article["publications"]:
             id = publication["submissionId"]
@@ -90,12 +86,13 @@ if __name__ == '__main__':
                 current_article.galley_views=0
             else:
                 current_article.galley_views = views["galleyViews"]
+
             if "abstractViews" not in views:
                current_article.abstract_views = 0
             else:
                current_article.abstract_views = views["abstractViews"]
+
             if "publication" in views:
-                #current_article.title = views["publication"]["fullTitle"]["en_US"]
                 current_article.title = get_item_title(views)
             else:
                 current_article.title="Not Found"
@@ -107,11 +104,6 @@ if __name__ == '__main__':
       articles.sort(key=lambda x: x.abstract_views, reverse=True)
 
 
-      for article in articles:
-         print(f"Latest={article}")
-
-      print("\nTop 10 articles:")
-      #top_10 = jnl.get_top_articles(start_date=start_date,end_date=end_date)
       all_articles = jnl.get_all_articles(start_date=start_date,end_date=end_date)
 
       sorted_all_articles = []
@@ -131,7 +123,7 @@ if __name__ == '__main__':
       top_10_articles=sorted_all_articles[:10]
       
       for article in top_10_articles:
-         print(f"top10 ={article}")
+         logging.info(article)
 
       quarter_name=start_date.replace("-","")[0:6]
       create_date=datetime.date.today().strftime("%B %d, %Y")
@@ -139,7 +131,6 @@ if __name__ == '__main__':
       coverage_date=date_range
       chart1=QuarterlyReportChart("../files/Updated_UAL_OJS_Quarterly_Stats_Template.xlsx",
                                  f"../reports/{jabbr}_{quarter_name}_report.xlsx")
-#   print(create_date)
       chart1.reset_charts()
       chart1.update_report(start_date,create_date,date_range,jtitle)
       chart1.update_latest(articles)

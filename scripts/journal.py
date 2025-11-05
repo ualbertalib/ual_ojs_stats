@@ -4,6 +4,7 @@ import json
 import datetime
 import time
 import pprint
+import logging
 
 class Journal(OJS):
   def __init__(self,jabbr,base_url,token):
@@ -96,7 +97,6 @@ class Journal(OJS):
 
 
 
-#  def get_galley_views(self, dateStart='2001-01-01',dateEnd=datetime.date.today()):
   def get_galley_views(self, dateStart='2001-01-01',
                        dateEnd=str(datetime.date.today().strftime("%Y-%m-%d")),
                        timelineInterval='month'):
@@ -117,7 +117,6 @@ class Journal(OJS):
 
       return jsond 
 
-   ### New additions ###
 
   def get_current_issue(self):
       url = f"{self._base_url}/api/v1/issues/current"
@@ -157,7 +156,7 @@ class Journal(OJS):
      for item in jsond['items']:
         issue_id = item['id']
         if (item['datePublished'][:7] <= dateEnd): 
-           print(f"Latest Issue={item}")
+           logging.info(f"Latest Issue={item}")
            break
 
      url2 = f"{self._base_url}/api/v1/issues/{issue_id}"
@@ -171,7 +170,6 @@ class Journal(OJS):
 	)
      
      jsond2 = resp.json()
-     #pprint.pprint(f"Latest Issue = {jsond2}")
      return jsond2
 
   def get_all_articles(self,count=100, 
@@ -191,7 +189,7 @@ class Journal(OJS):
            current_page_items = [] # Initialize for each loop iteration
 
            iteration=iteration+1
-           print(f"Iteration = {iteration}")
+           logging.info(f"Iteration = {iteration}")
            while retries < max_retries and not success:
                try:
                    response = requests.get(
@@ -210,34 +208,30 @@ class Journal(OJS):
                        current_page_items = response.json()
                        success = True
                    elif response.status_code == 401:
-                       print("Error: Unauthorized. Check your API token.")
+                       logging.error("Error: Unauthorized. Check your API token.")
                        return None # Critical error, cannot proceed
                    else:
-                       print(f"API Error (Status {response.status_code}): {response.text}")
+                       logging.error(f"API Error (Status {response.status_code}): {response.text}")
                        retries += 1
                        time.sleep(delay_seconds * (2 ** retries)) # Exponential backoff
                except requests.exceptions.RequestException as e:
-                   print(f"Network Error: {e}")
+                   logging.error(f"Network Error: {e}")
                    retries += 1
                    time.sleep(delay_seconds * (2 ** retries)) # Exponential backoff
 
            if not success:
-               print(f"Failed to retrieve data for offset {current_offset} after {max_retries} attempts. Stopping.")
+               logging.error(f"Failed to retrieve data for offset {current_offset} after {max_retries} attempts. Stopping.")
                return None
 
            # Add the items from the current page to our total list
-           print(f"current_page_items= {current_page_items}")
+           logging.info(f"current_page_items= {current_page_items}")
            if all_articles == None:
               all_articles=current_page_items
            else:
-              #all_articles={**all_articles,**current_page_items}  
               items=current_page_items["items"]
               all_articles["items"].extend(items)
-              #all_articles.extend(current_page_items)
         
            # Check if this was the last page (fewer items than 'count' implies no more data)
-           #print(f"length of current_page_items= {len(current_page_items['items'])}, count={count}, {current_page_items['itemsMax']}")
-           #pprint.pprint(current_page_items)
            items=current_page_items["items"]
            if len(items) < count:
                break # No more items to retrieve
@@ -245,7 +239,7 @@ class Journal(OJS):
            current_offset += count # Prepare for the next page
            time.sleep(delay_seconds) # Wait a bit before the next request
 
-       print(f"Successfully retrieved a total of {len(all_articles)} articles.")
+       logging.info(f"Successfully retrieved a total of {len(all_articles)} articles.")
        return all_articles
 
  
