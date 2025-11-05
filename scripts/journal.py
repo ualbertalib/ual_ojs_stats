@@ -28,12 +28,9 @@ class Journal(OJS):
   def token(self,value):
     self._token=value
 
-  #FURL="${url}${journal}/index.php/${journal}/api/v1/issues
-
 
   def get_submissions(self,status=3):
        
-      #url=f"{self._base_url}/{self._jabbr}/index.php/{self._jabbr}/api/v1/submissions"
       url=f"{self._base_url}/api/v1/submissions"
 
       resp = requests.get(
