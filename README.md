@@ -50,7 +50,7 @@ python3 quarterly_stats.py [csv_file] [start_date] [end_date] [start_index] [end
 
 ***csv_file:*** The name/path of your csv list of journals.  
 ***start_date*** and ***end_date***: The reporting period. Dates are in YYYY-MM-DD format.  
-***start_index*** and ***end_index***: Optional. Used to slice a section of the journal list, if you do not want reports for all journals in the list.
+***start_index*** and ***end_index***: Start and end indexes corresponding to the journals to report on (e.g. start_index = 0 will start the program at the first journal in the list).
 
 <br>
 
